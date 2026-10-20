@@ -1,0 +1,3 @@
+[submodule "eve-agent-practice/v1"]
+	path = eve-agent-practice/v1
+	url = https://github.com/EthanRodrigues001/eve-agent-framework.git

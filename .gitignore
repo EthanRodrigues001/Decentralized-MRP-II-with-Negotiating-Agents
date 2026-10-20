@@ -1,0 +1,15 @@
+# eve-agent-practice (and any future Node subprojects)
+node_modules/
+.next/
+.eve/
+.vercel/
+dist/
+*.tsbuildinfo
+
+# Microsoft Office temporary lock files
+~$*.docx
+
+# secrets
+.env
+.env.*
+!.env.example

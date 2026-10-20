@@ -1,0 +1,577 @@
+<style>
+  :root {
+    --bg: #eef2f5;
+    --surface: #ffffff;
+    --surface-2: #e3e9ed;
+    --ink: #15222c;
+    --ink-soft: #4c6070;
+    --ink-faint: #7c8fa0;
+    --line: #c7d3da;
+    --accent: #c1720e;
+    --accent-ink: #2a1400;
+    --blue: #1d3557;
+    --good: #2f7d5b;
+    --grid-line: rgba(29, 53, 87, 0.07);
+    --shadow: 0 1px 2px rgba(21,34,44,0.06), 0 8px 24px rgba(21,34,44,0.06);
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1720;
+      --surface: #16212b;
+      --surface-2: #1c2a35;
+      --ink: #e7ecf0;
+      --ink-soft: #a4b6c4;
+      --ink-faint: #6e8394;
+      --line: #2a3a47;
+      --accent: #e2933d;
+      --accent-ink: #241200;
+      --blue: #82a8cc;
+      --good: #5fbe93;
+      --grid-line: rgba(130, 168, 204, 0.08);
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1720; --surface: #16212b; --surface-2: #1c2a35;
+    --ink: #e7ecf0; --ink-soft: #a4b6c4; --ink-faint: #6e8394;
+    --line: #2a3a47; --accent: #e2933d; --accent-ink: #241200;
+    --blue: #82a8cc; --good: #5fbe93; --grid-line: rgba(130, 168, 204, 0.08);
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+    color-scheme: dark;
+  }
+  :root[data-theme="light"] {
+    --bg: #eef2f5; --surface: #ffffff; --surface-2: #e3e9ed;
+    --ink: #15222c; --ink-soft: #4c6070; --ink-faint: #7c8fa0;
+    --line: #c7d3da; --accent: #c1720e; --accent-ink: #2a1400;
+    --blue: #1d3557; --good: #2f7d5b; --grid-line: rgba(29, 53, 87, 0.07);
+    --shadow: 0 1px 2px rgba(21,34,44,0.06), 0 8px 24px rgba(21,34,44,0.06);
+    color-scheme: light;
+  }
+
+  * { box-sizing: border-box; }
+
+  .deckwrap {
+    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+    color: var(--ink);
+    background:
+      repeating-linear-gradient(0deg, var(--grid-line) 0 1px, transparent 1px 32px),
+      repeating-linear-gradient(90deg, var(--grid-line) 0 1px, transparent 1px 32px),
+      var(--bg);
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+  }
+
+  .eyebrow {
+    font-family: "Cascadia Code", "Cascadia Mono", Consolas, "SFMono-Regular", ui-monospace, monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  h1, h2, h3, .headline {
+    font-family: "Bahnschrift", "Segoe UI Semibold", "Arial Narrow", "Helvetica Neue", sans-serif;
+    font-weight: 700;
+    text-wrap: balance;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  .stage {
+    width: min(920px, 92vw);
+    margin: 0 auto;
+    padding: 2.6rem 0 1.4rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 78vh;
+  }
+
+  .slide {
+    display: none;
+    flex-direction: column;
+    gap: 1.1rem;
+    animation: rise 420ms ease both;
+  }
+  .slide.active { display: flex; }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .slide { animation: none; }
+  }
+
+  .slide h2 { font-size: clamp(1.5rem, 3.2vw, 2.15rem); line-height: 1.15; margin-top: 0.35rem; }
+  .slide .lede { font-size: 1.02rem; color: var(--ink-soft); max-width: 62ch; line-height: 1.55; }
+  .slide p { font-size: 1rem; line-height: 1.65; max-width: 66ch; color: var(--ink); }
+  .slide ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+  .slide ul li {
+    position: relative;
+    padding-left: 1.4em;
+    font-size: 0.98rem;
+    line-height: 1.55;
+    max-width: 66ch;
+  }
+  .slide ul li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 1px;
+    transform: rotate(45deg);
+  }
+  .slide b { color: var(--ink); font-weight: 700; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 1.1rem 1.3rem;
+    box-shadow: var(--shadow);
+  }
+
+  .grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-family: "Cascadia Code", Consolas, ui-monospace, monospace;
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+    padding: 0.2em 0.6em;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    color: var(--ink-soft);
+    width: fit-content;
+  }
+  .tag.warn { color: var(--ink); background: color-mix(in srgb, var(--accent) 22%, transparent); border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
+  .tag.good { color: var(--ink); background: color-mix(in srgb, var(--good) 20%, transparent); border-color: color-mix(in srgb, var(--good) 45%, transparent); }
+
+  svg text { font-family: "Cascadia Code", Consolas, ui-monospace, monospace; }
+
+  /* --- nav --- */
+  .navbar {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 0.9rem 0 1.4rem;
+    background: linear-gradient(to top, var(--bg) 55%, transparent);
+  }
+  .navrow {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.45rem 0.6rem;
+    box-shadow: var(--shadow);
+  }
+  .navbtn {
+    font-family: "Bahnschrift", "Segoe UI Semibold", sans-serif;
+    font-size: 0.85rem;
+    border: none;
+    background: var(--surface-2);
+    color: var(--ink);
+    width: 2.1rem; height: 2.1rem;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .navbtn:hover { background: var(--accent); color: var(--accent-ink); }
+  .navbtn:focus-visible, .dot:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .navbtn:disabled { opacity: 0.35; cursor: default; background: var(--surface-2); color: var(--ink); }
+
+  .dots { display: flex; gap: 0.4rem; }
+  .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--line);
+    border: none; padding: 0; cursor: pointer;
+  }
+  .dot.on { background: var(--accent); }
+
+  .count {
+    font-family: "Cascadia Code", Consolas, ui-monospace, monospace;
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    min-width: 3.4em;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .kicker-row { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+
+  .title-slide { justify-content: center; align-items: flex-start; text-align: left; min-height: 78vh; }
+  .title-slide h1 { font-size: clamp(2.2rem, 6vw, 3.4rem); line-height: 1.05; }
+  .title-slide .lede { font-size: 1.1rem; }
+  .title-slide .meta { display: flex; gap: 1.5rem; margin-top: 0.6rem; flex-wrap: wrap; }
+  .title-slide .meta div { display: flex; flex-direction: column; gap: 0.15rem; }
+  .title-slide .meta .k { font-family: "Cascadia Code", Consolas, ui-monospace, monospace; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); }
+  .title-slide .meta .v { font-size: 0.98rem; color: var(--ink); }
+
+  .compare-toggle {
+    display: inline-flex;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px;
+    background: var(--surface);
+    width: fit-content;
+  }
+  .compare-toggle button {
+    font-family: "Cascadia Code", Consolas, ui-monospace, monospace;
+    font-size: 0.78rem;
+    border: none;
+    background: transparent;
+    color: var(--ink-soft);
+    padding: 0.4em 0.9em;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .compare-toggle button.on { background: var(--accent); color: var(--accent-ink); }
+
+  .diagram-panel { display: none; }
+  .diagram-panel.on { display: block; }
+
+  kbd {
+    font-family: "Cascadia Code", Consolas, ui-monospace, monospace;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-bottom-width: 2px;
+    padding: 0.05em 0.4em;
+    border-radius: 3px;
+    font-size: 0.82em;
+  }
+</style>
+
+<div class="deckwrap">
+  <div class="stage">
+
+    <!-- 1: Title -->
+    <section class="slide active title-slide">
+      <div class="eyebrow">Decentralized MRP II — project update</div>
+      <h1>Where the project<br>stands after Day&nbsp;1</h1>
+      <p class="lede">A working note for Kavita ma'am, covering what was presented, the feedback received, and the plan going into the next session.</p>
+      <div class="meta">
+        <div><span class="k">Presented</span><span class="v">22 July 2026</span></div>
+        <div><span class="k">Reviewer</span><span class="v">Sir</span></div>
+        <div><span class="k">Status</span><span class="v">Architecture under revision</span></div>
+      </div>
+    </section>
+
+    <!-- 2: What is MRP II -->
+    <section class="slide">
+      <div class="eyebrow">01 — Background</div>
+      <h2>MRP asks "what, how many, when." MRP&nbsp;II asks what it takes to actually make it happen.</h2>
+      <div class="grid2">
+        <div class="card">
+          <div class="tag">MRP</div>
+          <p style="margin-top:0.6rem">Material Requirements Planning. Answers three questions: which components are needed, how many, and by when.</p>
+        </div>
+        <div class="card">
+          <div class="tag good">MRP II</div>
+          <p style="margin-top:0.6rem">Manufacturing Resource Planning II. Everything MRP does, plus machine and labour capacity, supplier constraints, scheduling, cost, and feedback from the shop floor.</p>
+        </div>
+      </div>
+      <p class="lede">This project builds an <b>MRP II-lite</b> prototype: a simulated furniture factory where independent agents negotiate for materials, suppliers, and machine time — then replan when something breaks.</p>
+    </section>
+
+    <!-- 3: One sentence -->
+    <section class="slide">
+      <div class="eyebrow">02 — The idea</div>
+      <h2>One master scheduler, replaced by many small negotiations.</h2>
+      <p class="lede">Instead of one system deciding everything, each production order asks independent resource agents — inventory, suppliers, machines — for offers, accepts the best valid combination, and renegotiates only the affected work when a commitment fails.</p>
+      <ul>
+        <li>Two orders compete for the same plywood and CNC machine time.</li>
+        <li>Each resource agent offers what it can actually deliver.</li>
+        <li>A machine failure or supplier delay triggers a targeted replan — not a restart.</li>
+      </ul>
+    </section>
+
+    <!-- 4: Day 1 recap -->
+    <section class="slide">
+      <div class="eyebrow">03 — 22 July 2026</div>
+      <h2>Day 1 had two halves.</h2>
+      <div class="grid2">
+        <div class="card">
+          <div class="tag">Part 1</div>
+          <p style="margin-top:0.6rem">MRP II fundamentals, explained from the ground up — what it is and why it goes beyond basic MRP.</p>
+        </div>
+        <div class="card">
+          <div class="tag">Part 2</div>
+          <p style="margin-top:0.6rem">Project architecture — the design work so far: agent responsibilities, negotiation protocol, technology direction.</p>
+        </div>
+      </div>
+      <p>A worked example illustrated the negotiation idea: <b>5 production items</b>, each needing a different sequence of steps, moving across <b>5 production lines</b>, handed off from one line's agent to the next.</p>
+    </section>
+
+    <!-- 5: hub diagram -->
+    <section class="slide">
+      <div class="eyebrow">04 — The demo</div>
+      <h2>The 5 lines were coordinated through a central hub.</h2>
+      <div class="card">
+        <svg viewBox="0 0 640 260" width="100%" role="img" aria-label="Diagram: a central hub connected to five production lines, each line handling one item.">
+          <g>
+            <circle cx="320" cy="130" r="42" fill="none" stroke="var(--accent)" stroke-width="2.5"></circle>
+            <text x="320" y="126" text-anchor="middle" font-size="12" fill="var(--ink)">CONTROL</text>
+            <text x="320" y="140" text-anchor="middle" font-size="12" fill="var(--ink)">HUB</text>
+          </g>
+          <!-- five lines -->
+          <g stroke="var(--ink-faint)" stroke-width="1.5" fill="none">
+            <line x1="320" y1="88" x2="70" y2="30"></line>
+            <line x1="320" y1="95" x2="190" y2="30"></line>
+            <line x1="320" y1="172" x2="320" y2="230"></line>
+            <line x1="320" y1="95" x2="450" y2="30"></line>
+            <line x1="320" y1="88" x2="570" y2="30"></line>
+          </g>
+          <g font-size="11" fill="var(--ink-soft)">
+            <g>
+              <rect x="30" y="8" width="80" height="34" rx="2" fill="none" stroke="var(--line)"></rect>
+              <text x="70" y="29" text-anchor="middle">Line 1 · Item A</text>
+            </g>
+            <g>
+              <rect x="150" y="8" width="80" height="34" rx="2" fill="none" stroke="var(--line)"></rect>
+              <text x="190" y="29" text-anchor="middle">Line 2 · Item B</text>
+            </g>
+            <g>
+              <rect x="280" y="230" width="80" height="34" rx="2" fill="none" stroke="var(--line)"></rect>
+              <text x="320" y="251" text-anchor="middle">Line 3 · Item C</text>
+            </g>
+            <g>
+              <rect x="410" y="8" width="80" height="34" rx="2" fill="none" stroke="var(--line)"></rect>
+              <text x="450" y="29" text-anchor="middle">Line 4 · Item D</text>
+            </g>
+            <g>
+              <rect x="530" y="8" width="80" height="34" rx="2" fill="none" stroke="var(--line)"></rect>
+              <text x="570" y="29" text-anchor="middle">Line 5 · Item E</text>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <p class="lede">Every line reported to, and took direction from, one central point. Useful for illustrating handoffs — but structurally, this is <b>one component making the decisions</b>.</p>
+    </section>
+
+    <!-- 6: feedback -->
+    <section class="slide">
+      <div class="eyebrow">05 — Feedback</div>
+      <h2>The brief calls for decentralized. The hub read as neutral, not approved.</h2>
+      <p class="lede">Sir's core requirement is that no single component should own all the planning decisions. The hub wasn't rejected outright — but it wasn't approved either. It's an open item.</p>
+      <p>Three existing systems came up for comparison, all of them centralized in the same way the demo hub was:</p>
+      <ul>
+        <li><b>Zoho</b> — a single cloud ERP suite; production planning, inventory, and scheduling all run through one unified platform.</li>
+        <li><b>Sugar (SugarCRM)</b> — primarily a customer/sales CRM; it connects to ERP systems but isn't itself a manufacturing-planning tool.</li>
+        <li><b>OpenERP</b> — an open-source ERP suite, renamed <b>Odoo</b> in 2014; modular, but still one system owning the planning logic.</li>
+      </ul>
+    </section>
+
+    <!-- 6b: scope boundary -->
+    <section class="slide">
+      <div class="eyebrow">06 — Scope boundary</div>
+      <h2>Not every domain fits a negotiating agent.</h2>
+      <p class="lede">Finance was raised as the example: negotiation there happens with external parties — banks, investors, regulatory requirements — not between internal resources, so it can't be modelled as an internal negotiating agent the way inventory, suppliers, or machine time can.</p>
+      <div class="card">
+        <div class="tag good">Already consistent</div>
+        <p style="margin-top:0.6rem">This matches a boundary the project had already set for itself: general ledger, invoicing, and payroll are already excluded from the first version. The comment confirms that boundary rather than introducing a new one.</p>
+      </div>
+    </section>
+
+    <!-- 6c: data and models -->
+    <section class="slide">
+      <div class="eyebrow">07 — Data and models</div>
+      <h2>Kaggle first. Synthesize if nothing fits.</h2>
+      <ul>
+        <li>Look for a suitable dataset on <b>Kaggle</b> first.</li>
+        <li>If nothing suitable exists, <b>synthesize</b> the data instead.</li>
+        <li>Models get trained on that data; those trained models are used by the AI agents.</li>
+        <li>A <b>live simulation</b> of the factory scenario was also discussed for the demonstration.</li>
+      </ul>
+      <div class="card">
+        <div class="tag warn">Open item</div>
+        <p style="margin-top:0.6rem">The project's existing rule keeps BOM, inventory, capacity, and scoring decisions in plain deterministic code, with models limited to explaining decisions or parsing input. Whether trained models feed in as <i>predictive inputs</i> (a demand or reliability estimate) or are meant to shape the negotiation outcome itself needs to be settled against that rule.</p>
+      </div>
+    </section>
+
+    <!-- 7: comparison toggle -->
+    <section class="slide">
+      <div class="eyebrow">08 — The distinction</div>
+      <h2>What was demoed vs. what's actually planned.</h2>
+      <div class="compare-toggle" role="tablist" aria-label="Choose diagram">
+        <button type="button" class="on" data-diagram="hub" role="tab" aria-selected="true">Day 1 demo</button>
+        <button type="button" data-diagram="dec" role="tab" aria-selected="false">Documented design</button>
+      </div>
+
+      <div class="card">
+        <div class="diagram-panel on" data-panel="hub">
+          <svg viewBox="0 0 640 200" width="100%" role="img" aria-label="Hub diagram: a central hub controlling five agents.">
+            <circle cx="320" cy="100" r="34" fill="none" stroke="var(--accent)" stroke-width="2.5"></circle>
+            <text x="320" y="104" text-anchor="middle" font-size="11" fill="var(--ink)">HUB</text>
+            <g stroke="var(--ink-faint)" stroke-width="1.5">
+              <line x1="320" y1="100" x2="90" y2="100"></line>
+              <line x1="320" y1="100" x2="195" y2="100"></line>
+              <line x1="320" y1="100" x2="445" y2="100"></line>
+              <line x1="320" y1="100" x2="550" y2="100"></line>
+            </g>
+            <g font-size="10" fill="var(--ink-soft)">
+              <circle cx="90" cy="100" r="16" fill="none" stroke="var(--line)"></circle>
+              <text x="90" y="104" text-anchor="middle">A1</text>
+              <circle cx="195" cy="100" r="16" fill="none" stroke="var(--line)"></circle>
+              <text x="195" y="104" text-anchor="middle">A2</text>
+              <circle cx="445" cy="100" r="16" fill="none" stroke="var(--line)"></circle>
+              <text x="445" y="104" text-anchor="middle">A4</text>
+              <circle cx="550" cy="100" r="16" fill="none" stroke="var(--line)"></circle>
+              <text x="550" y="104" text-anchor="middle">A5</text>
+            </g>
+          </svg>
+          <p style="margin-top:0.6rem">One hub, direct line to every agent. The hub decides; agents execute.</p>
+        </div>
+
+        <div class="diagram-panel" data-panel="dec">
+          <svg viewBox="0 0 640 200" width="100%" role="img" aria-label="Decentralized diagram: agents negotiating peer to peer via call-for-proposals messages, no central hub.">
+            <g stroke="var(--good)" stroke-width="1.4" fill="none" stroke-dasharray="3 3">
+              <path d="M 110 70 C 180 40, 240 40, 300 70"></path>
+              <path d="M 340 70 C 400 40, 460 40, 520 70"></path>
+              <path d="M 110 130 C 180 160, 240 160, 300 130"></path>
+              <path d="M 340 130 C 400 160, 460 160, 520 130"></path>
+              <path d="M 250 100 C 280 100, 300 100, 330 100"></path>
+            </g>
+            <g font-size="10" fill="var(--ink-soft)">
+              <rect x="80" y="85" width="60" height="30" rx="2" fill="none" stroke="var(--line)"></rect>
+              <text x="110" y="104" text-anchor="middle">Order</text>
+              <rect x="270" y="85" width="60" height="30" rx="2" fill="none" stroke="var(--line)"></rect>
+              <text x="300" y="104" text-anchor="middle">Inventory</text>
+              <rect x="330" y="85" width="60" height="30" rx="2" fill="none" stroke="var(--line)"></rect>
+              <text x="360" y="104" text-anchor="middle">Supplier</text>
+              <rect x="490" y="85" width="60" height="30" rx="2" fill="none" stroke="var(--line)"></rect>
+              <text x="520" y="104" text-anchor="middle">WorkCtr</text>
+            </g>
+            <text x="320" y="40" text-anchor="middle" font-size="10" fill="var(--accent)">CFP / PROPOSE / ACCEPT — no central node</text>
+          </svg>
+          <p style="margin-top:0.6rem">Each agent owns its own state and offers. The plan emerges from scored, accepted proposals — not from one component's decision.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8: tech decision -->
+    <section class="slide">
+      <div class="eyebrow">09 — Technology</div>
+      <h2>Mesa, SPADE, and PADE are out. Gemini, the AI SDK, and A2A are in.</h2>
+      <div class="grid2">
+        <div class="card">
+          <div class="tag">Dropped, and why</div>
+          <ul style="margin-top:0.6rem">
+            <li><b>Mesa</b> — an agent-based <i>simulation</i> framework, built to model behaviour in-process, not to pass messages between independently running agents.</li>
+            <li><b>SPADE</b> — Python, so it would sit alongside the TypeScript dashboard as a second language with its own integration risk; its optional LLM extension was also still in beta.</li>
+            <li><b>PADE</b> — same second-language issue as SPADE, plus its public docs were written for an older version than the current codebase.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="tag good">Current plan</div>
+          <ul style="margin-top:0.6rem">
+            <li><b>Gemini</b> — explains decisions and parses draft input. Never plans.</li>
+            <li><b>Vercel AI SDK</b> — TypeScript toolkit for the LLM-facing parts.</li>
+            <li><b>A2A protocol</b> — agent-to-agent messaging, in place of SPADE/XMPP. Unlike SPADE, it's a vendor-neutral open standard (Linux Foundation-governed), not one research project's framework.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="lede">One language end to end. Material needs, inventory, capacity, and offer scoring stay plain, deterministic code — the model never makes a manufacturing decision.</p>
+    </section>
+
+    <!-- 10: next step -->
+    <section class="slide">
+      <div class="eyebrow">10 — Next</div>
+      <h2>Before the full negotiation build: one small agent, working end to end.</h2>
+      <p class="lede">The next concrete step is a demo agent built on Vercel's <b>Eve</b> framework — a chat interface with a few callable tools — to show the technology stack actually running before the full multi-agent negotiation system is built out.</p>
+      <div class="card">
+        <div class="tag warn">Open items</div>
+        <ul style="margin-top:0.6rem">
+          <li>Address the hub-vs-decentralized feedback directly, using the documented negotiation design rather than a hub.</li>
+          <li>Revisit Zoho / Sugar / Odoo if the project is expected to be positioned against them specifically.</li>
+          <li>Clarify whether trained models feed the agents as predictive inputs, or are meant to shape the negotiation outcome itself.</li>
+          <li>Confirm the Kaggle-first, synthesize-if-needed dataset approach against the actual scenario data required.</li>
+        </ul>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="navbar">
+    <div class="navrow">
+      <button class="navbtn" id="prevBtn" aria-label="Previous slide">&#8592;</button>
+      <div class="dots" id="dots"></div>
+      <span class="count" id="count">1 / 10</span>
+      <button class="navbtn" id="nextBtn" aria-label="Next slide">&#8594;</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var dotsWrap = document.getElementById('dots');
+  var countEl = document.getElementById('count');
+  var prevBtn = document.getElementById('prevBtn');
+  var nextBtn = document.getElementById('nextBtn');
+  var current = 0;
+
+  slides.forEach(function (_, i) {
+    var d = document.createElement('button');
+    d.className = 'dot' + (i === 0 ? ' on' : '');
+    d.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+    d.addEventListener('click', function () { go(i); });
+    dotsWrap.appendChild(d);
+  });
+  var dots = Array.prototype.slice.call(dotsWrap.children);
+
+  function go(i) {
+    if (i < 0 || i >= slides.length) return;
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('on');
+    current = i;
+    slides[current].classList.add('active');
+    dots[current].classList.add('on');
+    countEl.textContent = (current + 1) + ' / ' + slides.length;
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === slides.length - 1;
+  }
+
+  prevBtn.addEventListener('click', function () { go(current - 1); });
+  nextBtn.addEventListener('click', function () { go(current + 1); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight') go(current + 1);
+    if (e.key === 'ArrowLeft') go(current - 1);
+  });
+
+  document.querySelectorAll('.compare-toggle button').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var target = btn.getAttribute('data-diagram');
+      document.querySelectorAll('.compare-toggle button').forEach(function (b) {
+        b.classList.toggle('on', b === btn);
+        b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
+      });
+      document.querySelectorAll('.diagram-panel').forEach(function (p) {
+        p.classList.toggle('on', p.getAttribute('data-panel') === target);
+      });
+    });
+  });
+
+  go(0);
+})();
+</script>
