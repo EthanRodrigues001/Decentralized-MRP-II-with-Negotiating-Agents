@@ -15,7 +15,15 @@ export type Performative =
   | "REJECT"
   | "ACCEPT_PROPOSAL"
   | "REJECT_PROPOSAL"
-  | "EXPLAIN";
+  | "EXPLAIN"
+  // Order-thread messages (customer order planning), rendered as cards in the chat.
+  | "ORDER"
+  | "BOM"
+  | "ALLOCATION"
+  | "PURCHASE"
+  | "STATUS"
+  // A line the user typed into an existing chat ("ok", "add one more").
+  | "SAY";
 
 export interface SupplierStats {
   supplier: SupplierName;
@@ -73,7 +81,7 @@ export interface NegotiationMessage {
   createdAt: string;
 }
 
-export type AgentRole = "supplier" | "gateway" | "explanation" | "human";
+export type AgentRole = "supplier" | "gateway" | "explanation" | "human" | "worker";
 export type AgentStatus = "idle" | "spawning" | "running" | "done";
 
 export interface AgentHandle {

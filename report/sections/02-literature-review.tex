@@ -1,0 +1,53 @@
+\chapter{Literature Review}
+\label{ch:literature}
+
+\todo{this chapter needs the shortlisted papers read and summarised; the
+candidate list is in docs/04-reference/paper-shortlist.md}
+
+\section{Manufacturing Resource Planning}
+
+\todo{MRP to MRP II to ERP: what each layer added, and where central planning
+becomes a weakness}
+
+\section{Multi-Agent Systems in Manufacturing}
+
+\todo{survey of agent-based manufacturing control; identify which papers
+distribute scheduling and which only distribute monitoring}
+
+\section{Negotiation Protocols}
+
+\subsection{The Contract Net Protocol}
+
+The Contract Net Protocol (CNP) assigns tasks by announcement and
+bidding~\cite{smith1980contractnet}. A manager announces a task, contractors
+submit bids, the manager awards the task to a chosen bid, and the winner
+reports the result. The FIPA specification formalises this as a sequence of
+call-for-proposal, proposal or refusal, acceptance or rejection, and finally
+result or failure~\cite{fipa2002contractnet}. This project uses a simplified
+CNP in which an order agent is the manager and resource agents are the
+contractors.
+
+\todo{state precisely which parts of FIPA compliance this project does and
+does not claim --- examiners ask this}
+
+\subsection{The Agent2Agent Protocol}
+
+\todo{what A2A provides, how it differs from FIPA-ACL over XMPP, and why it was
+chosen; see docs/03-planning/technology-decision.md}
+
+\section{Agent Frameworks and Runtimes}
+
+\todo{compare the frameworks evaluated -- Mesa, SPADE, PADE, and the
+TypeScript/A2A approach adopted; summarise the comparison table from the
+technology decision document}
+
+\section{Language Models in Planning Systems}
+
+\todo{why language models are unsuitable for the arithmetic and feasibility
+parts of planning, and what they are appropriate for; this justifies the
+project's rule that the model never computes or mutates state}
+
+\section{Summary and Research Gap}
+
+\todo{one paragraph: what existing work covers, what it leaves open, and how
+this project sits in that space}

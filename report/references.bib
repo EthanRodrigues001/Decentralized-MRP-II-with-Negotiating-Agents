@@ -1,0 +1,164 @@
+% ---------------------------------------------------------------------------
+% Bibliography.
+%
+% Entries below are taken from docs/04-reference/sources.md, which was last
+% verified on 2026-07-29. Re-check the URLs and access dates before
+% submission.
+%
+% The year field on the web sources is the year the source was accessed,
+% because most of these pages carry no publication date. Replace it with the
+% real publication year wherever the page states one.
+%
+% The literature review still needs peer-reviewed papers on agent-based
+% manufacturing control. Candidates are listed in
+% docs/04-reference/paper-shortlist.md. Add them here as article or
+% inproceedings entries once you have read them and can cite page numbers ---
+% do not cite a paper you have only seen the abstract of.
+%
+% Note: BibTeX treats an "at" sign as the start of an entry even on a line
+% beginning with a percent sign, so never write entry types in these comments.
+% ---------------------------------------------------------------------------
+
+% ----- Negotiation protocols ----------------------------------------------
+
+@article{smith1980contractnet,
+  author  = {Smith, Reid G.},
+  title   = {The Contract Net Protocol: High-Level Communication and Control
+             in a Distributed Problem Solver},
+  journal = {IEEE Transactions on Computers},
+  volume  = {C-29},
+  number  = {12},
+  pages   = {1104--1113},
+  year    = {1980},
+}
+
+@misc{fipa2002contractnet,
+  author       = {{Foundation for Intelligent Physical Agents}},
+  title        = {{FIPA} Contract Net Interaction Protocol Specification},
+  year         = {2002},
+  howpublished = {\url{https://www.fipa.org/specs/fipa00029/SC00029H.html}},
+  note         = {Standard SC00029H, accessed 2026-07-29},
+}
+
+@misc{fipaacl,
+  author       = {{Foundation for Intelligent Physical Agents}},
+  title        = {{FIPA} Agent Communication Language Specifications},
+  year         = {2002},
+  howpublished = {\url{https://www.fipa.org/repository/aclspecs.html}},
+  note         = {Accessed 2026-07-29},
+}
+
+% ----- Manufacturing planning ---------------------------------------------
+
+@misc{siemensmrp2,
+  author       = {{Siemens}},
+  title        = {Manufacturing Resource Planning {II}},
+  year         = {2026},
+  howpublished = {\url{https://www.siemens.com/en-us/technology/manufacturing-resource-planning-mrp-ii/}},
+  note         = {Accessed 2026-07-29},
+}
+
+@misc{oracleglossary,
+  author       = {{Oracle}},
+  title        = {{JD} Edwards World Manufacturing Glossary},
+  year         = {2026},
+  howpublished = {\url{https://docs.oracle.com/cd/E22655_01/nav/JD_Edwards_World_Glossary_A91.pdf}},
+  note         = {Accessed 2026-07-29},
+}
+
+% ----- Agent communication: A2A -------------------------------------------
+
+@misc{a2alinuxfoundation,
+  author       = {{The Linux Foundation}},
+  title        = {Linux Foundation Launches the {Agent2Agent} Protocol Project},
+  year         = {2026},
+  howpublished = {\url{https://www.linuxfoundation.org/press/linux-foundation-launches-the-agent2agent-protocol-project-to-enable-secure-intelligent-communication-between-ai-agents}},
+  note         = {Accessed 2026-07-29},
+}
+
+@misc{a2aadoption,
+  author       = {{The Linux Foundation}},
+  title        = {{A2A} Protocol Surpasses 150 Organizations and Sees
+                  Enterprise Production Use in First Year},
+  year         = {2026},
+  howpublished = {\url{https://www.linuxfoundation.org/press/a2a-protocol-surpasses-150-organizations-lands-in-major-cloud-platforms-and-sees-enterprise-production-use-in-first-year}},
+  note         = {Accessed 2026-07-29},
+}
+
+@misc{a2agoogledonation,
+  author       = {{Google}},
+  title        = {Google Cloud Donates {A2A} to the Linux Foundation},
+  year         = {2026},
+  howpublished = {\url{https://developers.googleblog.com/en/google-cloud-donates-a2a-to-linux-foundation/}},
+  note         = {Accessed 2026-07-29},
+}
+
+% ----- Implementation stack -----------------------------------------------
+
+@misc{aisdk,
+  author       = {{Vercel}},
+  title        = {{AI SDK} Documentation},
+  year         = {2026},
+  howpublished = {\url{https://ai-sdk.dev/docs/introduction}},
+  note         = {Accessed 2026-07-29},
+}
+
+@misc{aisdk6,
+  author       = {{Vercel}},
+  title        = {{AI SDK} 6},
+  year         = {2026},
+  howpublished = {\url{https://vercel.com/blog/ai-sdk-6}},
+  note         = {Accessed 2026-07-29},
+}
+
+@misc{neon,
+  author       = {{Neon}},
+  title        = {Neon: Serverless Postgres},
+  year         = {2026},
+  howpublished = {\url{https://github.com/neondatabase/neon}},
+  note         = {Accessed 2026-07-29},
+}
+
+% ----- Local language model -----------------------------------------------
+
+@misc{ollamastructured,
+  author       = {{Ollama}},
+  title        = {Structured Outputs},
+  year         = {2026},
+  howpublished = {\url{https://docs.ollama.com/capabilities/structured-outputs}},
+  note         = {Accessed 2026-07-29},
+}
+
+@misc{llama32,
+  author       = {{Meta}},
+  title        = {{Llama} 3.2 Model Card},
+  year         = {2026},
+  howpublished = {\url{https://github.com/meta-llama/llama-models/blob/main/models/llama3_2/MODEL_CARD.md}},
+  note         = {Accessed 2026-07-29},
+}
+
+% ----- Frameworks evaluated and not adopted -------------------------------
+
+@misc{spade,
+  author       = {{SPADE}},
+  title        = {{SPADE}: Smart Python Agent Development Environment},
+  year         = {2026},
+  howpublished = {\url{https://spadeagents.eu/}},
+  note         = {Accessed 2026-07-18},
+}
+
+@misc{mesa,
+  author       = {{Mesa Developers}},
+  title        = {Mesa: Agent-Based Modelling in Python},
+  year         = {2026},
+  howpublished = {\url{https://mesa.readthedocs.io/stable/index.html}},
+  note         = {Accessed 2026-07-18},
+}
+
+@misc{pade,
+  author       = {{GREI-UFC}},
+  title        = {{PADE}: Python Agent Development Framework},
+  year         = {2026},
+  howpublished = {\url{https://github.com/grei-ufc/pade}},
+  note         = {Accessed 2026-07-18},
+}

@@ -1,0 +1,40 @@
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+Conventional Manufacturing Resource Planning (MRP II) systems plan materials
+and capacity from a single central scheduler. That design is straightforward to
+reason about, but a disruption such as a machine failure or a late supplier
+delivery typically forces a full replan, and the resulting plan offers little
+explanation of why one option was chosen over another.
+
+This project builds a decentralized MRP II-lite prototype in which planning
+decisions are distributed across independent software agents. Each production
+order calculates its own material and operation requirements, then requests
+offers from inventory, supplier, and work-centre agents. Every agent owns its
+own availability and constraints and cannot modify another agent's state.
+Orders score the offers they receive using visible, deterministic rules and
+convert the winning offers into commitments. When a disruption is injected,
+only the affected unfinished work is renegotiated; completed and unaffected
+commitments remain fixed.
+
+The prototype is implemented as a single TypeScript stack: a Next.js dashboard,
+one service per agent communicating over the Agent2Agent (A2A) protocol using a
+simplified Contract Net negotiation, and Neon serverless Postgres for reference
+data, owned state, and an append-only audit trail. All quantities, feasibility
+checks, and commitments are computed by deterministic code. A large language
+model is used only for constrained input assistance and read-only explanation,
+never for arithmetic or state changes, so planning continues to work when the
+model is unavailable.
+
+The system is demonstrated with a furniture factory scenario in which two
+orders compete for limited plywood and CNC machine time. The dashboard shows
+the proposals exchanged, the accepted plan, the rejected alternatives with
+reasons, the resulting cost and completion time, and the revised plan after a
+disruption.
+
+\vspace{0.5cm}
+\noindent\textbf{Keywords:} multi-agent systems, MRP II, Contract Net
+Protocol, negotiation, production scheduling, Agent2Agent protocol,
+decentralized planning.
+
+\clearpage

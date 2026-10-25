@@ -79,3 +79,21 @@
   - State ownership rules from D-006 are enforced through schema/table boundaries and application code, exactly as they would be on a local server; moving to a hosted database does not relax those rules.
 - Revisit when: Neon's free-tier limits (compute hours, storage, branches) are checked against actual demo load before the final demonstration.
 
+
+## D-011 — Own DB-backed event queue and deterministic auto-purchase rule
+
+- Date: 2026-10-24
+- Status: provisional
+- Decision: Inventory events use a Postgres outbox table processed by polling, not an external queue. Auto-purchase is a pure function (`decidePurchase`): shortfall at or below a configurable threshold (default 200) buys automatically, otherwise approval is required.
+- Reason: Works on serverless with no worker, keeps the LLM out of purchasing decisions (consistent with the LLM boundary), and is unit-testable.
+- Conditions: Threshold counts shortfall after subtracting stock already on order; a per-day auto-spend cap guards against many small buys.
+- Revisit when: Event volume or latency makes polling inadequate (add cron or a worker).
+
+## D-012 — Write the report locally in LaTeX, treat Overleaf as an upload target
+
+- Date: 2026-10-24
+- Status: provisional
+- Decision: The project report is authored in `report/` as a local LaTeX project built with the installed MiKTeX via `build.ps1`. Overleaf is used for submission and collaboration only, with a downloaded-zip round trip as the transfer mechanism. No Overleaf sync tool is installed.
+- Reason: Overleaf's Git and Dropbox sync are premium features tied to the project owner's subscription, so neither is available on a free account. Every unofficial sync tool and Overleaf MCP server either wraps that same paid Git bridge or stores a live Overleaf session cookie, which is full account access held by an unvetted third-party package. Local authoring also gives a real git history of the report and lets the PDF be compiled and checked directly.
+- Conditions: `main.tex` stays thin and chapters stay in separate files, so Overleaf content can be merged file by file. Only widely available LaTeX packages are used, so the document compiles identically on Overleaf's `pdflatex`.
+- Revisit when: The college turns out to have Overleaf Commons or a group subscription, or the project owner is on a paid plan — in which case the official Git bridge becomes available and should be preferred over the zip round trip.

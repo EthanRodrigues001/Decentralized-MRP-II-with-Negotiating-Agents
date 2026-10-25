@@ -1,11 +1,8 @@
-import { sql } from "@/lib/db";
+import { handle } from "@/lib/api";
+import { listThreads } from "@/lib/threads";
 
-export async function GET() {
-  const rows = await sql`
-    SELECT id, item_category, quantity, due_in_days, status, winning_supplier, created_at
-    FROM negotiations
-    ORDER BY created_at DESC
-    LIMIT 50
-  `;
-  return Response.json({ tasks: rows });
+export const dynamic = "force-dynamic";
+
+export function GET() {
+  return handle(async () => ({ threads: await listThreads() }));
 }

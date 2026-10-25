@@ -14,7 +14,15 @@ import { Marker, MarkerContent } from "@/components/ui/marker";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Spinner } from "@/components/ui/spinner";
+import { RunBlock, type AgentRun } from "@/components/run-steps";
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription } from "@/components/ui/empty";
+import {
+  AllocationCard,
+  BomMessage,
+  OrderCard,
+  PurchaseCard,
+  StatusLine,
+} from "@/components/order-cards";
 import type {
   NegotiationMessage,
   ProposePayload,
@@ -50,6 +58,7 @@ function MessageRow({
 }) {
   const isYou = message.sender === "You";
   const payload = message.payload as Record<string, unknown>;
+  const isCard = ["ORDER", "BOM", "ALLOCATION", "PURCHASE", "STATUS"].includes(message.performative);
 
   // System-only handoff notices read better as a divider than a chat bubble.
   if (message.performative === "REJECT_PROPOSAL") {
@@ -78,8 +87,19 @@ function MessageRow({
           </Badge>
         </MessageHeader>
 
-        <Bubble variant={bubbleVariant(message.performative)} align={isYou ? "end" : "start"}>
-          <BubbleContent>
+        <Bubble
+          variant={isCard ? "ghost" : bubbleVariant(message.performative)}
+          align={isYou ? "end" : "start"}
+          className={isCard ? "w-full max-w-full" : undefined}
+        >
+          <BubbleContent className={isCard ? "w-full max-w-full p-0" : undefined}>
+            {message.performative === "ORDER" && <OrderCard p={payload} />}
+            {message.performative === "BOM" && <BomMessage p={payload} />}
+            {message.performative === "ALLOCATION" && <AllocationCard p={payload} />}
+            {message.performative === "PURCHASE" && <PurchaseCard p={payload} narration={message.narration} />}
+            {message.performative === "STATUS" && <StatusLine p={payload} narration={message.narration} />}
+            {message.performative === "SAY" && <p>{String(payload.text)}</p>}
+
             {message.performative === "CFP" && (
               <p>
                 Requesting <b>{String(payload.quantity)}</b> units of{" "}
@@ -177,15 +197,39 @@ function MessageRow({
   );
 }
 
+// Places each agent run just before the first message that agent wrote after the
+// run started, so its thinking and tool calls read as the lead-up to its answer.
+function anchorRuns(messages: NegotiationMessage[], runs: AgentRun[]) {
+  const before = new Map<string, AgentRun[]>();
+  const used = new Set<string>();
+  const leftover: AgentRun[] = [];
+  for (const run of runs) {
+    const started = new Date(run.started_at).getTime() - 1000;
+    const target = messages.find(
+      (m) => !used.has(m.id) && m.sender === run.agent && new Date(m.createdAt).getTime() >= started
+    );
+    if (target) {
+      used.add(target.id);
+      before.set(target.id, [...(before.get(target.id) ?? []), run]);
+    } else {
+      leftover.push(run);
+    }
+  }
+  return { before, leftover };
+}
+
 export function ChatThread({
   messages,
   streamingIds,
   onApprove,
+  runs = [],
 }: {
   messages: NegotiationMessage[];
   streamingIds: Set<string>;
   onApprove: (supplier: string | null) => void;
+  runs?: AgentRun[];
 }) {
+  const { before, leftover } = anchorRuns(messages, runs);
   if (messages.length === 0) {
     return (
       <Empty className="h-full">
@@ -207,12 +251,18 @@ export function ChatThread({
           <MessageScrollerContent className="flex flex-col gap-4 p-4">
             {messages.map((m) => (
               <MessageScrollerItem key={m.id} messageId={m.id}>
+                {(before.get(m.id) ?? []).map((r) => (
+                  <RunBlock key={r.id} run={r} className="mb-2 ml-9 w-[calc(100%-2.25rem)]" />
+                ))}
                 <MessageRow
                   message={m}
                   isStreaming={streamingIds.has(m.id)}
                   onApprove={onApprove}
                 />
               </MessageScrollerItem>
+            ))}
+            {leftover.map((r) => (
+              <RunBlock key={r.id} run={r} className="ml-9 w-[calc(100%-2.25rem)]" />
             ))}
           </MessageScrollerContent>
         </MessageScrollerViewport>

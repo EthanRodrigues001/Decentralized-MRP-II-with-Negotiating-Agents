@@ -1,0 +1,85 @@
+\chapter{System Design}
+\label{ch:design}
+
+\section{Architectural Overview}
+
+\todo{insert the architecture diagram as figures/architecture.pdf, then
+describe the flow in prose; see docs/02-design/system-architecture.md}
+
+% \begin{figure}[htbp]
+%   \centering
+%   \includegraphics[width=\textwidth]{architecture}
+%   \caption{System architecture showing the dashboard, agent services, message
+%            transport, and database.}
+%   \label{fig:architecture}
+% \end{figure}
+
+\section{Agent Roles}
+
+\begin{description}[nosep]
+  \item[Order Agent] Owns one production order. Explodes its bill of
+        materials, requests offers, scores them, and holds the resulting
+        commitments.
+  \item[Inventory Agent] Owns current stock. Offers the quantity it can
+        reserve and holds reservations.
+  \item[Supplier Agent] Represents one supplier. Offers missing material at a
+        price and delivery date.
+  \item[Work-Centre Agent] Owns one work centre's finite capacity. Offers
+        production slots.
+  \item[Explanation Agent] Produces read-only natural-language summaries of a
+        recorded negotiation. Holds no planning authority.
+\end{description}
+
+\todo{for each agent, tabulate the state it owns, the messages it accepts, and
+the messages it emits}
+
+\section{Technology Stack}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Selected technology stack.}
+  \label{tab:stack}
+  \begin{tabular}{@{}ll@{}}
+    \toprule
+    \textbf{Concern} & \textbf{Choice} \\
+    \midrule
+    Dashboard            & Next.js with TypeScript \\
+    Agent runtime        & TypeScript services, one per agent \\
+    Agent communication  & Agent2Agent (A2A) protocol \\
+    Negotiation          & Simplified FIPA Contract Net \\
+    Storage              & Neon serverless Postgres \\
+    Language model       & Vercel AI SDK, Gemini provider \\
+    Offline model option & Ollama with a small Llama model \\
+    Domain logic         & Deterministic TypeScript \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\todo{justify each row against the alternatives rejected; the comparison is in
+docs/03-planning/technology-decision.md and the decision log}
+
+\section{Data Ownership and Storage}
+
+Each agent owns a private slice of state that only it may write. Shared
+reference data is read-only to agents. All consequential events are appended to
+an audit log that is never updated in place, which is what makes the decision
+trace reconstructable after the fact.
+
+\todo{entity-relationship diagram plus a table per schema object, marking the
+owning agent for each}
+
+\section{Message Design}
+
+\todo{specify the message envelope: identifier, version, correlation
+identifier, sender, recipient, type, payload, timestamp. Explain how
+idempotency is achieved on redelivery}
+
+\section{Database Schema}
+
+\todo{schema listing once the spike settles the final shape}
+
+\section{Dashboard Design}
+
+\todo{screen-by-screen description with wireframes or screenshots: scenario
+loading, live negotiation view, accepted plan, rejected alternatives with
+reasons, disruption injection, revised plan}

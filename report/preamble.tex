@@ -1,0 +1,71 @@
+% ---------------------------------------------------------------------------
+% Packages and formatting. Kept to widely available packages so the document
+% compiles identically on MiKTeX locally and on Overleaf.
+% ---------------------------------------------------------------------------
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+
+\usepackage[a4paper,left=1.5in,right=1in,top=1in,bottom=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Lets TeX stretch a line a little further before giving up and letting text
+% run into the margin. Mostly this absorbs the long file paths inside \todo
+% placeholders while the report is still a draft.
+\setlength{\emergencystretch}{3em}
+
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+\usepackage{fancyhdr}
+\setlength{\headheight}{14pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\projecttitle}
+\fancyhead[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Chapter pages use the same header as the rest of the document.
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyhead[L]{\small\projecttitle}%
+  \fancyhead[R]{\small\thepage}%
+  \renewcommand{\headrulewidth}{0.4pt}%
+}
+
+% Numeric, IEEE-like citations. unsrtnat ships with natbib, so there is
+% nothing extra to install on either machine.
+\usepackage[numbers,sort&compress]{natbib}
+\bibliographystyle{unsrtnat}
+
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  frame=single,
+  captionpos=b,
+  showstringspaces=false,
+}
+
+% Long reference URLs would otherwise run past the right margin, because a URL
+% has no normal break points. xurl lets them break anywhere.
+\usepackage{xurl}
+
+% hyperref loads late by convention.
+\usepackage[hidelinks]{hyperref}
+
+% Shorthand for content that is still a placeholder. Every one of these
+% should be gone before submission; \listtodos prints what is left.
+\newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}

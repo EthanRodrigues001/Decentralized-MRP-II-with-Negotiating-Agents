@@ -9,6 +9,20 @@ dist/
 # Microsoft Office temporary lock files
 ~$*.docx
 
+# LaTeX build output (report/)
+report/build/
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.out
+*.synctex.gz
+*.toc
+
 # secrets
 .env
 .env.*

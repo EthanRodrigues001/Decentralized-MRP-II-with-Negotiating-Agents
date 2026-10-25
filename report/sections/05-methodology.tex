@@ -1,0 +1,72 @@
+\chapter{Methodology}
+\label{ch:methodology}
+
+\section{The Negotiation Cycle}
+
+A single planning round proceeds as follows.
+
+\begin{enumerate}[nosep]
+  \item An order agent explodes its bill of materials into material and
+        operation requirements.
+  \item It announces its material requirement to the inventory agent and to
+        every supplier agent, and its operation requirement to the relevant
+        work-centre agents.
+  \item The inventory agent offers the quantity it can reserve. Supplier
+        agents offer the remainder at their own price and delivery date.
+        Work-centre agents offer available slots.
+  \item The order agent discards offers that cannot satisfy its constraints.
+  \item It scores the remaining offers with deterministic, visible rules.
+  \item It accepts the best valid combination; each acceptance becomes exactly
+        one commitment.
+  \item Resource agents record their commitments and reduce their available
+        capacity or stock accordingly.
+\end{enumerate}
+
+\todo{sequence diagram of one full round as figures/negotiation-sequence.pdf}
+
+\section{Bill of Materials Explosion}
+
+\todo{state the recursive algorithm, with worked arithmetic for the
+demonstration BOM. Include pseudocode in a listing}
+
+\section{Inventory Netting and Reservation}
+
+\todo{how gross requirement becomes net requirement, and how a reservation
+prevents two orders from claiming the same stock}
+
+\section{Offer Scoring}
+
+Scoring must be deterministic and inspectable, because the ability to explain a
+decision depends on it being reproducible.
+
+\todo{give the scoring function explicitly: the factors, their weights, how
+cost and lateness are normalised and traded off, and how ties are broken. State
+the weights as a table so an examiner can recompute any score by hand}
+
+\section{Commitment and Consistency}
+
+\todo{how a commitment is made atomic, and what happens when two orders accept
+overlapping offers from the same resource in the same round}
+
+\section{Disruption Handling and Partial Replanning}
+
+When a disruption is injected, the system identifies the commitments that
+depended on the failed resource, releases only those, and starts a new
+negotiation round for the affected unfinished work. Completed work and
+commitments that did not depend on the failed resource are left untouched.
+
+\todo{specify how the affected set is computed, and how the system proves it
+did not disturb unaffected commitments --- this is the project's central claim
+and needs to be measurable}
+
+\section{Role of the Language Model}
+
+The language model is confined to two tasks: parsing a free-text draft order
+into a structured order, and producing read-only explanations of a recorded
+negotiation. It never performs arithmetic, never judges feasibility, never
+scores an offer, and never writes state. Parsed output is validated against a
+schema and rejected if it does not conform, so a bad generation becomes a
+visible failure rather than a silently wrong plan.
+
+\todo{show the schema and the validation path, and describe the degraded
+behaviour when no model is reachable}

@@ -13,9 +13,11 @@ import { Spinner } from "@/components/ui/spinner";
 export function TaskComposer({
   onSubmit,
   disabled,
+  placeholder = "Describe what you need, e.g. '10 dining tables for Acme due in 14 days' or '3 foam padding'",
 }: {
   onSubmit: (text: string) => void;
   disabled?: boolean;
+  placeholder?: string;
 }) {
   const [text, setText] = useState("");
 
@@ -29,7 +31,7 @@ export function TaskComposer({
   return (
     <InputGroup>
       <InputGroupInput
-        placeholder="Describe what you need — e.g. 'need 1500 units of raw materials, due in 10 days'"
+        placeholder={placeholder}
         value={text}
         onChange={(e) => setText(e.target.value)}
         onKeyDown={(e) => {

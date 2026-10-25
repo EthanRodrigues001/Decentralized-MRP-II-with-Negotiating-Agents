@@ -57,12 +57,19 @@ function AgentNode({ data }: NodeProps & { data: FlowAgentState }) {
           : "border-border";
 
   const roleLabel =
-    data.role === "gateway" ? "Gateway" : data.role === "explanation" ? "ExplanationAgent" : "SupplierAgent";
+    data.role === "gateway"
+      ? "Gateway"
+      : data.role === "explanation"
+        ? "ExplanationAgent"
+        : data.role === "worker"
+          ? "Agent"
+          : "SupplierAgent";
 
   return (
     <div className={`rounded-lg border bg-card px-4 py-3 shadow-sm w-[190px] transition-colors ${borderClass}`}>
       <Handle type="target" position={Position.Left} />
       <Handle type="source" position={Position.Left} id="out" />
+      <Handle type="source" position={Position.Right} id="right" />
       <div className="flex items-center justify-between">
         <div className="text-sm font-semibold">{roleLabel}</div>
         <StatusDot status={data.status} />
@@ -91,9 +98,15 @@ function FlowInner({ agents }: { agents: FlowAgentState[] }) {
   const gateway = agents.find((a) => a.role === "gateway");
   const explanation = agents.find((a) => a.role === "explanation");
   const suppliers = agents.filter((a) => a.role === "supplier");
+  // Order threads have no gateway: the planning, inventory, purchasing and
+  // production agents spin up in the order they are needed and form a chain.
+  const workers = agents.filter((a) => a.role === "worker");
 
   const nodes: Node[] = useMemo(() => {
     const n: Node[] = [{ id: "you", type: "human", position: { x: 20, y: 140 }, data: {} }];
+    workers.forEach((w, i) => {
+      n.push({ id: w.id, type: "agent", position: { x: 220 + i * 230, y: 140 }, data: w });
+    });
     if (gateway) n.push({ id: gateway.id, type: "agent", position: { x: 260, y: 140 }, data: gateway });
     suppliers.forEach((s, i) => {
       n.push({ id: s.id, type: "agent", position: { x: 540, y: i * 130 }, data: s });
@@ -111,6 +124,16 @@ function FlowInner({ agents }: { agents: FlowAgentState[] }) {
 
   const edges: Edge[] = useMemo(() => {
     const e: Edge[] = [];
+    workers.forEach((w, i) => {
+      e.push({
+        id: `chain-${w.id}`,
+        source: i === 0 ? "you" : workers[i - 1].id,
+        sourceHandle: i === 0 ? undefined : "right",
+        target: w.id,
+        animated: w.status === "running" || w.status === "spawning",
+        label: w.lastAction ?? undefined,
+      });
+    });
     if (gateway) {
       e.push({
         id: "you-gateway",

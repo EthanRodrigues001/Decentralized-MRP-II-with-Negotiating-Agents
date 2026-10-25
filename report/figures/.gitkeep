@@ -1,0 +1,5 @@
+Figures go here. main.tex sets \graphicspath to this folder, so
+\includegraphics{architecture} finds figures/architecture.pdf without a path.
+
+Prefer PDF or SVG-exported-to-PDF for diagrams, so they stay sharp when
+printed. Use PNG only for screenshots.

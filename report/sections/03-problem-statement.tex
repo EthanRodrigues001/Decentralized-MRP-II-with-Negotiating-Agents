@@ -1,0 +1,65 @@
+\chapter{Problem Statement and Requirements}
+\label{ch:problem}
+
+\section{Problem Statement}
+
+Build a decentralized MRP II-lite system in which independent order, inventory,
+supplier, and work-centre agents negotiate for materials and production
+capacity. The system must create a feasible plan, keep a full decision trace,
+and renegotiate affected unfinished work after a disruption, without any
+component acting as a hidden central scheduler.
+
+\section{What ``Decentralized'' Means Here}
+
+Decentralized refers to where decisions are made, not to the removal of all
+shared infrastructure.
+
+\begin{itemize}[nosep]
+  \item Each agent owns its availability, constraints, offers, and
+        commitments.
+  \item No agent may edit another agent's private state.
+  \item Agents coordinate only through versioned messages.
+  \item The message transport routes messages but does not choose a plan.
+  \item The database stores data and history but does not act as a scheduler.
+  \item The dashboard observes and issues commands but makes no manufacturing
+        decision.
+\end{itemize}
+
+\section{Functional Requirements}
+
+\todo{convert docs/01-requirements/problem-breakdown.md into a numbered
+FR-1..FR-n table; a numbered list is what examiners look for when they trace
+requirements to tests}
+
+\section{Non-Functional Requirements}
+
+\todo{numbered NFR list covering traceability, idempotency, determinism,
+behaviour when the language model is unavailable, and response time targets}
+
+\section{Engineering Constraints}
+
+These constraints are fixed and hold for every design decision in this report.
+
+\begin{itemize}[nosep]
+  \item No language model performs BOM arithmetic, inventory balancing,
+        capacity feasibility checking, or direct state mutation.
+  \item Planning and replanning must work with the local model stopped.
+  \item No hidden global scheduler in the dashboard, gateway, or database.
+  \item Every accepted proposal maps to exactly one resource commitment.
+  \item Every important message is versioned, traceable, and idempotent.
+  \item Completed and unaffected commitments remain fixed during partial
+        replanning.
+  \item The system does not claim global optimisation.
+\end{itemize}
+
+\section{Demonstration Scenario}
+
+One furniture factory, two products, two production orders competing for the
+same plywood stock and the same CNC work centre, with competing suppliers
+offering the shortfall at different prices and delivery dates. Once a plan is
+committed, a machine failure or supplier delay is injected, forcing the
+affected order to negotiate a replacement plan.
+
+\todo{fix the exact BOM, stock levels, capacities, costs, and lead times; the
+whole results chapter depends on these numbers, so freeze them early --- see
+docs/01-requirements/scope-and-demo.md}

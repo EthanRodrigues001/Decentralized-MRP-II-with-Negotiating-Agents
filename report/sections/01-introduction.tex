@@ -1,0 +1,79 @@
+\chapter{Introduction}
+\label{ch:introduction}
+
+\section{Background}
+
+Manufacturing Resource Planning (MRP II) extends basic Material Requirements
+Planning. Where MRP answers what material is needed, how much, and when,
+MRP II also accounts for production resources: machines, people, finite
+capacity, supplier constraints, schedules, costs, and feedback from events on
+the shop floor~\cite{siemensmrp2,oracleglossary}.
+
+\todo{expand to roughly two paragraphs on how MRP II is used in practice; cite
+a standard reference such as Wight or a current textbook}
+
+\section{Motivation}
+
+Conventional MRP II systems compute a plan centrally. A single scheduler holds
+all state and makes all decisions. Two consequences follow. First, a single
+disruption tends to invalidate the whole plan, because the plan was produced as
+one indivisible calculation. Second, the output is difficult to interrogate: the
+plan states what to do, but not which alternatives were considered or why they
+lost.
+
+Distributing the decision across independent agents addresses both. Each
+resource owns its own constraints and answers for itself, so a failure touches
+only the commitments that depended on it. Because a plan is assembled from
+individual offers and acceptances, the reasoning is recorded as a by-product of
+how the plan was built.
+
+\section{Problem Definition}
+
+Build a decentralized MRP II-lite system in which independent agents negotiate
+for inventory, supplier deliveries, and production capacity. The system must
+produce a feasible production plan, react to disruptions by renegotiating only
+the affected unfinished work, and show why each decision was made.
+
+\section{Objectives}
+
+\begin{enumerate}[nosep]
+  \item Explode a multi-level bill of materials into material and operation
+        requirements for a production order.
+  \item Net requirements against inventory and reserve what is available.
+  \item Obtain and compare supplier offers for the resulting shortages.
+  \item Schedule operations against finite work-centre capacity.
+  \item Negotiate between order agents and resource agents using a simplified
+        Contract Net Protocol carried over the A2A protocol.
+  \item Convert each accepted offer into exactly one resource commitment.
+  \item Renegotiate affected unfinished work after an injected machine failure
+        or supplier delay, leaving completed and unaffected commitments fixed.
+  \item Record a complete, auditable decision trace and present it in a
+        dashboard.
+  \item Continue to plan and replan when the optional local language model is
+        unavailable.
+\end{enumerate}
+
+\section{Scope and Limitations}
+
+The system is an MRP II-lite subset, not a full ERP. It implements BOM
+explosion, inventory netting and reservation, supplier selection, finite
+capacity scheduling, operation sequencing, cost and due-date trade-offs,
+negotiation and commitment, failure-driven replanning, and a decision trace.
+
+The following are explicitly out of scope:
+
+\begin{itemize}[nosep]
+  \item Financial accounting, payroll, and purchasing workflows.
+  \item Global optimality. The system produces a feasible, explainable plan
+        assembled from local decisions; it does not claim an optimal one.
+  \item Blockchain or distributed consensus, which the problem does not
+        require.
+  \item Fully offline operation. The database (Neon) and the primary language
+        model provider are cloud services and need outbound internet access.
+        Only the optional local model path runs without internet, and only for
+        language-model assistance.
+\end{itemize}
+
+\section{Organisation of the Report}
+
+\todo{write once the chapters are final -- one sentence per chapter}

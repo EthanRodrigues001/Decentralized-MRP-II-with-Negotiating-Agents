@@ -1,0 +1,55 @@
+% ---------------------------------------------------------------------------
+% Decentralized MRP II with Negotiating Agents -- project report
+%
+% Build locally:  .\build.ps1        (from the report/ folder)
+% Build manually: latexmk -pdf -outdir=build main.tex
+%
+% This file is deliberately thin. Chapter text lives in sections/, so a
+% chapter can be replaced wholesale without touching anything else.
+% ---------------------------------------------------------------------------
+
+\documentclass[12pt,a4paper,oneside]{report}
+
+\input{metadata}
+\input{preamble}
+
+\begin{document}
+
+% ----- Front matter -------------------------------------------------------
+\pagenumbering{roman}
+
+\input{frontmatter/titlepage}
+\input{frontmatter/certificate}
+\input{frontmatter/declaration}
+\input{frontmatter/acknowledgement}
+\input{frontmatter/abstract}
+
+\tableofcontents
+\listoffigures
+\listoftables
+\input{frontmatter/abbreviations}
+
+\clearpage
+
+% ----- Body ---------------------------------------------------------------
+\pagenumbering{arabic}
+
+\input{sections/01-introduction}
+\input{sections/02-literature-review}
+\input{sections/03-problem-statement}
+\input{sections/04-system-design}
+\input{sections/05-methodology}
+\input{sections/06-implementation}
+\input{sections/07-testing-and-results}
+\input{sections/08-conclusion}
+
+% ----- Back matter --------------------------------------------------------
+% While drafting, list every entry in references.bib even if the text does not
+% cite it yet, so you can see the bibliography forming. DELETE this line before
+% submission --- a final report should list only what it actually cites.
+\nocite{*}
+
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliography{references}
+
+\end{document}

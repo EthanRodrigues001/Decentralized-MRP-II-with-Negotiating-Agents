@@ -5,6 +5,9 @@ const TABLE_QUERIES = {
   negotiations: () => sql`SELECT * FROM negotiations ORDER BY created_at DESC LIMIT 100`,
   negotiation_messages: () =>
     sql`SELECT * FROM negotiation_messages ORDER BY created_at DESC LIMIT 200`,
+  purchase_orders: () => sql`SELECT * FROM purchase_orders ORDER BY created_at DESC LIMIT 100`,
+  stock_movements: () => sql`SELECT * FROM stock_movements ORDER BY created_at DESC LIMIT 200`,
+  events: () => sql`SELECT * FROM events ORDER BY created_at DESC LIMIT 200`,
 } as const;
 
 type TableName = keyof typeof TABLE_QUERIES;

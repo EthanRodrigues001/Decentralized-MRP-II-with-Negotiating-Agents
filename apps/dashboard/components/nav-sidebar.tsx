@@ -2,7 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { MessagesSquareIcon, DatabaseIcon } from "lucide-react";
+import {
+  MessagesSquareIcon,
+  DatabaseIcon,
+  BoxesIcon,
+  SettingsIcon,
+  ClipboardListIcon,
+  FileSignatureIcon,
+  WorkflowIcon,
+  LayoutDashboardIcon,
+} from "lucide-react";
 import {
   Sidebar,
   SidebarHeader,
@@ -15,8 +24,14 @@ import {
 } from "@/components/ui/sidebar";
 
 const NAV_ITEMS = [
+  { href: "/dashboard/overview", label: "Dashboard", icon: LayoutDashboardIcon },
   { href: "/dashboard", label: "Console", icon: MessagesSquareIcon },
+  { href: "/dashboard/orders", label: "Orders", icon: ClipboardListIcon },
+  { href: "/dashboard/flow", label: "Flow", icon: WorkflowIcon },
+  { href: "/dashboard/inventory", label: "Inventory", icon: BoxesIcon },
+  { href: "/dashboard/contracts", label: "Contracts", icon: FileSignatureIcon },
   { href: "/dashboard/data", label: "Data", icon: DatabaseIcon },
+  { href: "/dashboard/settings", label: "Settings", icon: SettingsIcon },
 ];
 
 export function NavSidebar() {

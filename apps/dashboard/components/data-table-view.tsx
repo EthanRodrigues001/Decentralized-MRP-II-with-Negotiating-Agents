@@ -12,7 +12,13 @@ import {
 } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-type TableName = "procurement_orders" | "negotiations" | "negotiation_messages";
+type TableName =
+  | "procurement_orders"
+  | "negotiations"
+  | "negotiation_messages"
+  | "purchase_orders"
+  | "stock_movements"
+  | "events";
 
 function formatCell(value: unknown): string {
   if (value === null || value === undefined) return "—";
@@ -97,6 +103,9 @@ export function DataTableView({ compact = false }: { compact?: boolean }) {
         <TabsTrigger value="negotiation_messages">
           Messages {counts.negotiation_messages ? `(${counts.negotiation_messages})` : ""}
         </TabsTrigger>
+        <TabsTrigger value="purchase_orders">Purchase orders</TabsTrigger>
+        <TabsTrigger value="stock_movements">Stock ledger</TabsTrigger>
+        <TabsTrigger value="events">Events</TabsTrigger>
       </TabsList>
 
       <TabsContent value="procurement_orders" className="mt-2">
@@ -108,6 +117,11 @@ export function DataTableView({ compact = false }: { compact?: boolean }) {
       <TabsContent value="negotiation_messages" className="mt-2">
         <DataTable rows={rowsByTable.negotiation_messages ?? []} height={height} />
       </TabsContent>
+      {(["purchase_orders", "stock_movements", "events"] as const).map((t) => (
+        <TabsContent key={t} value={t} className="mt-2">
+          <DataTable rows={rowsByTable[t] ?? []} height={height} />
+        </TabsContent>
+      ))}
     </Tabs>
   );
 }
